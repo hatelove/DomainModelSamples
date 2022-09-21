@@ -14,7 +14,7 @@ public class MatchOddsModel
                              .IntersectBy(betTypesModel.MajorBetTypes, odds => odds.BetType!.Value);
 
         //filter Ht BetTypes 
-        result = matchFull.IsFirstHalf() && !IsOverTime(minutes)
+        result = matchFull.IsFirstHalf() && !IsOverFirstHalfFreezeTime(minutes)
             ? RemoveBetTypesOddsWhenNoOddsValue(result, betTypesModel.HtBetTypes)
             : result.ExceptBy(betTypesModel.HtBetTypes, odds => odds.BetType!.Value);
 
@@ -22,7 +22,7 @@ public class MatchOddsModel
         return RemoveBetTypesOddsWhenNoOddsValue(result, betTypesModel.FtBetTypes);
     }
 
-    private static bool IsOverTime(int minutes)
+    private static bool IsOverFirstHalfFreezeTime(int minutes)
     {
         return minutes >= (FirstHalfMinutes - 1);
     }
