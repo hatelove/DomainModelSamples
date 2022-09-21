@@ -22,6 +22,13 @@ public class BetTypesModel
 
         if (matchFull.IsFirstHalf())
         {
+            var hasNoFtOdds = result.IntersectBy(FtBetTypes, odds => odds.BetType.Value)
+                                    .All(x => x.Odds2A == 0m);
+
+            if (hasNoFtOdds)
+            {
+                result = result.ExceptBy(FtBetTypes, odds => odds.BetType.Value);
+            }
         }
         else
         {
