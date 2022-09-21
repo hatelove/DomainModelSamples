@@ -18,8 +18,9 @@ public class BetTypesModel
 
     public IEnumerable<DbOdds> FilterOdds(IEnumerable<DbOdds> oddsList, MatchFull matchFull, int minutes)
     {
-        var result = oddsList.Where(x => x.BetType.HasValue)
-                             .IntersectBy(MajorBetTypes, odds => odds.BetType.Value);
+        var matchOddsModel = new MatchOddsModel{MatchId=91, OddsList = oddsList};
+        var result = matchOddsModel.OddsList.Where(x => x.BetType.HasValue)
+                                   .IntersectBy(MajorBetTypes, odds => odds.BetType.Value);
 
         result = matchFull.IsFirstHalf() && !IsOverTime(minutes)
             ? RemoveBetTypesOddsWhenNoOddsValue(result, HtBetTypes)
@@ -40,4 +41,10 @@ public class BetTypesModel
 
         return hasNoOddsValue ? result.ExceptBy(betTypes, odds => odds.BetType.Value) : result;
     }
+}
+
+public class MatchOddsModel
+{
+    public int MatchId { get; set; }
+    public IEnumerable<DbOdds> OddsList { get; set; }
 }
