@@ -20,7 +20,7 @@ public class BetTypesModel
         var result = oddsList.Where(x => x.BetType.HasValue)
                              .IntersectBy(MajorBetTypes, odds => odds.BetType.Value);
 
-        if (matchFull.LivePeriod == 1)
+        if (IsFirstHalf(matchFull))
         {
             return result;
         }
@@ -29,5 +29,10 @@ public class BetTypesModel
             result = result.ExceptBy(HtBetTypes, odds => odds.BetType.Value);
             return result;
         }
+    }
+
+    private static bool IsFirstHalf(MatchFull matchFull)
+    {
+        return matchFull.LivePeriod == 1;
     }
 }
