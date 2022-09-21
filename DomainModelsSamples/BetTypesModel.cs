@@ -11,16 +11,16 @@ public class BetTypesModel
         HtBetTypes = _betTypesRepo.GetHtBetTypes();
     }
 
-    public IEnumerable<int> MajorBetTypes { get; set; }
-    public IEnumerable<int> HtBetTypes { get; set; }
     public IEnumerable<int> FtBetTypes => MajorBetTypes.Except(HtBetTypes);
+    public IEnumerable<int> HtBetTypes { get; }
+    public IEnumerable<int> MajorBetTypes { get; }
 
     public IEnumerable<DbOdds> FilterOdds(IEnumerable<DbOdds> oddsList, MatchFull matchFull, int minutes)
     {
         var result = oddsList.Where(x => x.BetType.HasValue)
                              .IntersectBy(MajorBetTypes, odds => odds.BetType.Value);
 
-        if (IsFirstHalf(matchFull))
+        if (matchFull.IsFirstHalf())
         {
             return result;
         }
@@ -29,10 +29,5 @@ public class BetTypesModel
             result = result.ExceptBy(HtBetTypes, odds => odds.BetType.Value);
             return result;
         }
-    }
-
-    private static bool IsFirstHalf(MatchFull matchFull)
-    {
-        return matchFull.LivePeriod == 1;
     }
 }
