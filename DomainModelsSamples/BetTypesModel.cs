@@ -21,7 +21,7 @@ public class BetTypesModel
         var result = oddsList.Where(x => x.BetType.HasValue)
                              .IntersectBy(MajorBetTypes, odds => odds.BetType.Value);
 
-        result = matchFull.IsFirstHalf() && IsOverTime(minutes)
+        result = matchFull.IsFirstHalf() && !IsOverTime(minutes)
             ? RemoveBetTypesOddsWhenNoOddsValue(result, HtBetTypes)
             : result.ExceptBy(HtBetTypes, odds => odds.BetType.Value);
 
@@ -30,7 +30,7 @@ public class BetTypesModel
 
     private static bool IsOverTime(int minutes)
     {
-        return minutes < (FirstHalfMinutes - 1);
+        return minutes >= (FirstHalfMinutes - 1);
     }
 
     private IEnumerable<DbOdds> RemoveBetTypesOddsWhenNoOddsValue(IEnumerable<DbOdds> result, IEnumerable<int> betTypes)
