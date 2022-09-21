@@ -16,9 +16,8 @@ public class BetTypesModel
     public IEnumerable<int> HtBetTypes { get; }
     public IEnumerable<int> MajorBetTypes { get; }
 
-    public IEnumerable<DbOdds> FilterOdds(IEnumerable<DbOdds> oddsList, MatchFull matchFull, int minutes)
+    public IEnumerable<DbOdds> FilterOdds(MatchFull matchFull, int minutes, MatchOddsModel matchOddsModel)
     {
-        var matchOddsModel = new MatchOddsModel{MatchId=91, OddsList = oddsList};
         var result = matchOddsModel.OddsList.Where(x => x.BetType.HasValue)
                                    .IntersectBy(MajorBetTypes, odds => odds.BetType.Value);
 

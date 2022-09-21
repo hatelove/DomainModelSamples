@@ -1,9 +1,7 @@
 #region
 
-using System.Collections.Generic;
 using FluentAssertions;
 using NSubstitute;
-using NUnit.Framework;
 
 #endregion
 
@@ -40,16 +38,16 @@ public class BetTypesModelTests
         GivenHtBetTypesFromRepo(new[] { 7, 8 });
         _betTypesModel = new BetTypesModel(_betTypesRepo);
 
-        var filterOdds = _betTypesModel.FilterOdds(new[]
-                                                   {
-                                                       new DbOdds() { BetType = null, Odds2A = 0.1m }, //filter by null
-                                                       new DbOdds() { BetType = 2, Odds2A = 0.2m }, //filter by major
-                                                       new DbOdds() { BetType = 3, Odds2A = 0.3m },
-                                                       new DbOdds() { BetType = 7, Odds2A = 0.7m },
-                                                       new DbOdds() { BetType = 4, Odds2A = 0.4m }, //filter by major
-                                                   }
-                                                   , new MatchFull() { LivePeriod = 1 } //first half
-                                                   , 40);
+        IEnumerable<DbOdds> oddsList = new[]
+                                       {
+                                           new DbOdds() { BetType = null, Odds2A = 0.1m }, //filter by null
+                                           new DbOdds() { BetType = 2, Odds2A = 0.2m }, //filter by major
+                                           new DbOdds() { BetType = 3, Odds2A = 0.3m },
+                                           new DbOdds() { BetType = 7, Odds2A = 0.7m },
+                                           new DbOdds() { BetType = 4, Odds2A = 0.4m }, //filter by major
+                                       };
+        var filterOdds = _betTypesModel.FilterOdds(new MatchFull() { LivePeriod = 1 } //first half
+                                                   , 40, new MatchOddsModel{MatchId=91, OddsList = oddsList});
 
         filterOdds.Should()
                   .BeEquivalentTo(new[]
@@ -66,16 +64,16 @@ public class BetTypesModelTests
         GivenHtBetTypesFromRepo(new[] { 7, 8 });
         _betTypesModel = new BetTypesModel(_betTypesRepo);
 
-        var filterOdds = _betTypesModel.FilterOdds(new[]
-                                                   {
-                                                       new DbOdds() { BetType = 1, Odds2A = 0.1m },
-                                                       new DbOdds() { BetType = 2, Odds2A = 0.2m }, //filter by major
-                                                       new DbOdds() { BetType = 3, Odds2A = 0.3m },
-                                                       new DbOdds() { BetType = 7, Odds2A = 0.7m }, //remove by ft 
-                                                       new DbOdds() { BetType = 8, Odds2A = 0.8m }, //remove by ft
-                                                   }
-                                                   , new MatchFull() { LivePeriod = 2 } //full time
-                                                   , 40);
+        IEnumerable<DbOdds> oddsList = new[]
+                                       {
+                                           new DbOdds() { BetType = 1, Odds2A = 0.1m },
+                                           new DbOdds() { BetType = 2, Odds2A = 0.2m }, //filter by major
+                                           new DbOdds() { BetType = 3, Odds2A = 0.3m },
+                                           new DbOdds() { BetType = 7, Odds2A = 0.7m }, //remove by ft 
+                                           new DbOdds() { BetType = 8, Odds2A = 0.8m }, //remove by ft
+                                       };
+        var filterOdds = _betTypesModel.FilterOdds(new MatchFull() { LivePeriod = 2 } //full time
+                                                   , 40, new MatchOddsModel{MatchId=91, OddsList = oddsList});
 
         filterOdds.Should()
                   .BeEquivalentTo(new[]
@@ -92,16 +90,16 @@ public class BetTypesModelTests
         GivenHtBetTypesFromRepo(new[] { 7, 8 });
         _betTypesModel = new BetTypesModel(_betTypesRepo);
 
-        var filterOdds = _betTypesModel.FilterOdds(new[]
-                                                   {
-                                                       new DbOdds() { BetType = 1, Odds2A = 0m }, // remove, because betType 1 & 3 were 0
-                                                       new DbOdds() { BetType = 2, Odds2A = 0.2m },
-                                                       new DbOdds() { BetType = 3, Odds2A = 0m }, // remove, because betType 1 & 3 were 0
-                                                       new DbOdds() { BetType = 7, Odds2A = 0.7m },
-                                                       new DbOdds() { BetType = 8, Odds2A = 0.8m }
-                                                   }
-                                                   , new MatchFull() { LivePeriod = 2 } //full time
-                                                   , 40);
+        IEnumerable<DbOdds> oddsList = new[]
+                                       {
+                                           new DbOdds() { BetType = 1, Odds2A = 0m }, // remove, because betType 1 & 3 were 0
+                                           new DbOdds() { BetType = 2, Odds2A = 0.2m },
+                                           new DbOdds() { BetType = 3, Odds2A = 0m }, // remove, because betType 1 & 3 were 0
+                                           new DbOdds() { BetType = 7, Odds2A = 0.7m },
+                                           new DbOdds() { BetType = 8, Odds2A = 0.8m }
+                                       };
+        var filterOdds = _betTypesModel.FilterOdds(new MatchFull() { LivePeriod = 2 } //full time
+                                                   , 40, new MatchOddsModel{MatchId=91, OddsList = oddsList});
 
         filterOdds.Should()
                   .BeEquivalentTo(new DbOdds[] { });
@@ -114,16 +112,16 @@ public class BetTypesModelTests
         GivenHtBetTypesFromRepo(new[] { 7, 8 });
         _betTypesModel = new BetTypesModel(_betTypesRepo);
 
-        var filterOdds = _betTypesModel.FilterOdds(new[]
-                                                   {
-                                                       new DbOdds() { BetType = 1, Odds2A = 0.1m }, // keep, because betType 1 & 3 have some odds value
-                                                       new DbOdds() { BetType = 2, Odds2A = 0.2m },
-                                                       new DbOdds() { BetType = 3, Odds2A = 0m }, // keep, because betType 1 & 3 have some odds value
-                                                       new DbOdds() { BetType = 7, Odds2A = 0.7m },
-                                                       new DbOdds() { BetType = 8, Odds2A = 0.8m }
-                                                   }
-                                                   , new MatchFull() { LivePeriod = 2 } //full time
-                                                   , 40);
+        IEnumerable<DbOdds> oddsList = new[]
+                                       {
+                                           new DbOdds() { BetType = 1, Odds2A = 0.1m }, // keep, because betType 1 & 3 have some odds value
+                                           new DbOdds() { BetType = 2, Odds2A = 0.2m },
+                                           new DbOdds() { BetType = 3, Odds2A = 0m }, // keep, because betType 1 & 3 have some odds value
+                                           new DbOdds() { BetType = 7, Odds2A = 0.7m },
+                                           new DbOdds() { BetType = 8, Odds2A = 0.8m }
+                                       };
+        var filterOdds = _betTypesModel.FilterOdds(new MatchFull() { LivePeriod = 2 } //full time
+                                                   , 40, new MatchOddsModel{MatchId=91, OddsList = oddsList});
 
         filterOdds.Should()
                   .BeEquivalentTo(new[]
@@ -140,16 +138,16 @@ public class BetTypesModelTests
         GivenHtBetTypesFromRepo(new[] { 7, 8 });
         _betTypesModel = new BetTypesModel(_betTypesRepo);
 
-        var filterOdds = _betTypesModel.FilterOdds(new[]
-                                                   {
-                                                       new DbOdds() { BetType = 1, Odds2A = 0m }, // remove, because betType 1 & 3 all 0
-                                                       new DbOdds() { BetType = 2, Odds2A = 0.2m },
-                                                       new DbOdds() { BetType = 3, Odds2A = 0m }, // remove, because betType 1 & 3 all 0
-                                                       new DbOdds() { BetType = 7, Odds2A = 0.7m },
-                                                       new DbOdds() { BetType = 8, Odds2A = 0m }
-                                                   }
-                                                   , new MatchFull() { LivePeriod = 1 } // first half
-                                                   , 40);
+        IEnumerable<DbOdds> oddsList = new[]
+                                       {
+                                           new DbOdds() { BetType = 1, Odds2A = 0m }, // remove, because betType 1 & 3 all 0
+                                           new DbOdds() { BetType = 2, Odds2A = 0.2m },
+                                           new DbOdds() { BetType = 3, Odds2A = 0m }, // remove, because betType 1 & 3 all 0
+                                           new DbOdds() { BetType = 7, Odds2A = 0.7m },
+                                           new DbOdds() { BetType = 8, Odds2A = 0m }
+                                       };
+        var filterOdds = _betTypesModel.FilterOdds(new MatchFull() { LivePeriod = 1 } // first half
+                                                   , 40, new MatchOddsModel{MatchId=91, OddsList = oddsList});
 
         filterOdds.Should()
                   .BeEquivalentTo(new[]
@@ -166,16 +164,16 @@ public class BetTypesModelTests
         GivenHtBetTypesFromRepo(new[] { 7, 8 });
         _betTypesModel = new BetTypesModel(_betTypesRepo);
 
-        var filterOdds = _betTypesModel.FilterOdds(new[]
-                                                   {
-                                                       new DbOdds() { BetType = 1, Odds2A = 0m },
-                                                       new DbOdds() { BetType = 2, Odds2A = 0.2m },
-                                                       new DbOdds() { BetType = 3, Odds2A = 0.3m },
-                                                       new DbOdds() { BetType = 7, Odds2A = 0m }, // remove, because betType 7 & 8 all 0
-                                                       new DbOdds() { BetType = 8, Odds2A = 0m }, // remove, because betType 7 & 8 all 0
-                                                   }
-                                                   , new MatchFull() { LivePeriod = 1 } //first half
-                                                   , 40);
+        IEnumerable<DbOdds> oddsList = new[]
+                                       {
+                                           new DbOdds() { BetType = 1, Odds2A = 0m },
+                                           new DbOdds() { BetType = 2, Odds2A = 0.2m },
+                                           new DbOdds() { BetType = 3, Odds2A = 0.3m },
+                                           new DbOdds() { BetType = 7, Odds2A = 0m }, // remove, because betType 7 & 8 all 0
+                                           new DbOdds() { BetType = 8, Odds2A = 0m }, // remove, because betType 7 & 8 all 0
+                                       };
+        var filterOdds = _betTypesModel.FilterOdds(new MatchFull() { LivePeriod = 1 } //first half
+                                                   , 40, new MatchOddsModel{MatchId=91, OddsList = oddsList});
 
         filterOdds.Should()
                   .BeEquivalentTo(new[]
@@ -192,16 +190,16 @@ public class BetTypesModelTests
         GivenHtBetTypesFromRepo(new[] { 7, 8 });
         _betTypesModel = new BetTypesModel(_betTypesRepo);
 
-        var filterOdds = _betTypesModel.FilterOdds(new[]
-                                                   {
-                                                       new DbOdds() { BetType = 1, Odds2A = 0m },
-                                                       new DbOdds() { BetType = 2, Odds2A = 0.2m },
-                                                       new DbOdds() { BetType = 3, Odds2A = 0.3m },
-                                                       new DbOdds() { BetType = 7, Odds2A = 0.7m },//remove, because of over time 
-                                                       new DbOdds() { BetType = 8, Odds2A = 0m }, //remove, because of over time
-                                                   }
-                                                   , new MatchFull() { LivePeriod = 1 } //first half
-                                                   , 44);
+        IEnumerable<DbOdds> oddsList = new[]
+                                       {
+                                           new DbOdds() { BetType = 1, Odds2A = 0m },
+                                           new DbOdds() { BetType = 2, Odds2A = 0.2m },
+                                           new DbOdds() { BetType = 3, Odds2A = 0.3m },
+                                           new DbOdds() { BetType = 7, Odds2A = 0.7m },//remove, because of over time 
+                                           new DbOdds() { BetType = 8, Odds2A = 0m }, //remove, because of over time
+                                       };
+        var filterOdds = _betTypesModel.FilterOdds(new MatchFull() { LivePeriod = 1 } //first half
+                                                   , 44, new MatchOddsModel{MatchId=91, OddsList = oddsList});
 
         filterOdds.Should()
                   .BeEquivalentTo(new[]
