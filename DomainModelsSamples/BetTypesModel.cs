@@ -2,6 +2,7 @@ namespace DomainModelsSamples;
 
 public class BetTypesModel
 {
+    private const int FirstHalfMinutes = 45;
     private readonly IBetTypesRepo _betTypesRepo;
 
     public BetTypesModel(IBetTypesRepo betTypesRepo)
@@ -20,11 +21,16 @@ public class BetTypesModel
         var result = oddsList.Where(x => x.BetType.HasValue)
                              .IntersectBy(MajorBetTypes, odds => odds.BetType.Value);
 
-        result = matchFull.IsFirstHalf() && minutes < (45-1)
+        result = matchFull.IsFirstHalf() && IsOverTime(minutes)
             ? RemoveBetTypesOddsWhenNoOddsValue(result, HtBetTypes)
             : result.ExceptBy(HtBetTypes, odds => odds.BetType.Value);
 
         return RemoveBetTypesOddsWhenNoOddsValue(result, FtBetTypes);
+    }
+
+    private static bool IsOverTime(int minutes)
+    {
+        return minutes < (FirstHalfMinutes - 1);
     }
 
     private IEnumerable<DbOdds> RemoveBetTypesOddsWhenNoOddsValue(IEnumerable<DbOdds> result, IEnumerable<int> betTypes)
