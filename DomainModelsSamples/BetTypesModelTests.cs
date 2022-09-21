@@ -146,16 +146,16 @@ public class BetTypesModelTests
                                                        new DbOdds() { BetType = 2, Odds2A = 0.2m },
                                                        new DbOdds() { BetType = 3, Odds2A = 0m }, // remove, because betType 1 & 3 all 0
                                                        new DbOdds() { BetType = 7, Odds2A = 0.7m },
-                                                       new DbOdds() { BetType = 8, Odds2A = 0.8m }
+                                                       new DbOdds() { BetType = 8, Odds2A = 0m }
                                                    }
-                                                   , new MatchFull() { LivePeriod = 1 } //full time
+                                                   , new MatchFull() { LivePeriod = 1 } // first half
                                                    , 40);
 
         filterOdds.Should()
                   .BeEquivalentTo(new[]
                                   {
                                       new DbOdds() { BetType = 7, Odds2A = 0.7m },
-                                      new DbOdds() { BetType = 8, Odds2A = 0.8m }
+                                      new DbOdds() { BetType = 8, Odds2A = 0m }
                                   });
     }
 
@@ -174,8 +174,34 @@ public class BetTypesModelTests
                                                        new DbOdds() { BetType = 7, Odds2A = 0m }, // remove, because betType 7 & 8 all 0
                                                        new DbOdds() { BetType = 8, Odds2A = 0m }, // remove, because betType 7 & 8 all 0
                                                    }
-                                                   , new MatchFull() { LivePeriod = 1 } //full time
+                                                   , new MatchFull() { LivePeriod = 1 } //first half
                                                    , 40);
+
+        filterOdds.Should()
+                  .BeEquivalentTo(new[]
+                                  {
+                                      new DbOdds() { BetType = 1, Odds2A = 0m },
+                                      new DbOdds() { BetType = 3, Odds2A = 0.3m },
+                                  });
+    }
+
+    [Test]
+    public void filter_odds_when_first_half_but_over_time()
+    {
+        GivenMajorBetTypesFromRepo(new[] { 1, 7, 8, 3 });
+        GivenHtBetTypesFromRepo(new[] { 7, 8 });
+        _betTypesModel = new BetTypesModel(_betTypesRepo);
+
+        var filterOdds = _betTypesModel.FilterOdds(new[]
+                                                   {
+                                                       new DbOdds() { BetType = 1, Odds2A = 0m },
+                                                       new DbOdds() { BetType = 2, Odds2A = 0.2m },
+                                                       new DbOdds() { BetType = 3, Odds2A = 0.3m },
+                                                       new DbOdds() { BetType = 7, Odds2A = 0.7m },//remove, because of over time 
+                                                       new DbOdds() { BetType = 8, Odds2A = 0m }, //remove, because of over time
+                                                   }
+                                                   , new MatchFull() { LivePeriod = 1 } //first half
+                                                   , 44);
 
         filterOdds.Should()
                   .BeEquivalentTo(new[]
