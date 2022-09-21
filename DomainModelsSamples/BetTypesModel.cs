@@ -19,7 +19,15 @@ public class BetTypesModel
     {
         var result = oddsList.Where(x => x.BetType.HasValue)
                              .IntersectBy(MajorBetTypes, odds => odds.BetType.Value);
-        
-        return result;
+
+        if (matchFull.LivePeriod == 1)
+        {
+            return result;
+        }
+        else
+        {
+            result = result.ExceptBy(HtBetTypes, odds => odds.BetType.Value);
+            return result;
+        }
     }
 }
