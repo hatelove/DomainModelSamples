@@ -159,6 +159,32 @@ public class BetTypesModelTests
                                   });
     }
 
+    [Test]
+    public void filter_odds_when_first_half_and_ht_types_odds_all_0()
+    {
+        GivenMajorBetTypesFromRepo(new[] { 1, 7, 8, 3 });
+        GivenHtBetTypesFromRepo(new[] { 7, 8 });
+        _betTypesModel = new BetTypesModel(_betTypesRepo);
+
+        var filterOdds = _betTypesModel.FilterOdds(new[]
+                                                   {
+                                                       new DbOdds() { BetType = 1, Odds2A = 0m },
+                                                       new DbOdds() { BetType = 2, Odds2A = 0.2m },
+                                                       new DbOdds() { BetType = 3, Odds2A = 0.3m },
+                                                       new DbOdds() { BetType = 7, Odds2A = 0m }, // remove, because betType 7 & 8 all 0
+                                                       new DbOdds() { BetType = 8, Odds2A = 0m }, // remove, because betType 7 & 8 all 0
+                                                   }
+                                                   , new MatchFull() { LivePeriod = 1 } //full time
+                                                   , 40);
+
+        filterOdds.Should()
+                  .BeEquivalentTo(new[]
+                                  {
+                                      new DbOdds() { BetType = 1, Odds2A = 0m },
+                                      new DbOdds() { BetType = 3, Odds2A = 0.3m },
+                                  });
+    }
+
     private void GivenHtBetTypesFromRepo(IEnumerable<int> htBetTypes)
     {
         _betTypesRepo.GetHtBetTypes().Returns(htBetTypes);
