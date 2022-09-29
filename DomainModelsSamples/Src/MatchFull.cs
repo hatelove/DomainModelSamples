@@ -2,18 +2,8 @@ namespace DomainModelsSamples;
 
 public class MatchFull
 {
-    public int LivePeriod { get; set; }
     public string GoalRecord { get; set; }
-
-    public bool IsFirstHalf()
-    {
-        return LivePeriod == 1;
-    }
-
-    public GoalRecord GetGoalRecord()
-    {
-        return new GoalRecord(GoalRecord);
-    }
+    public int LivePeriod { get; set; }
 
     public void ApplyEvent(SoccerEvent soccerEvent)
     {
@@ -28,6 +18,16 @@ public class MatchFull
             goalRecord.SecondHalf += GetGoalValue(soccerEvent);
             GoalRecord = $"{goalRecord.FirstHalf};{goalRecord.SecondHalf}";
         }
+    }
+
+    public GoalRecord GetGoalRecord()
+    {
+        return new GoalRecord(GoalRecord);
+    }
+
+    public bool IsFirstHalf()
+    {
+        return LivePeriod == 1;
     }
 
     private static string GetGoalValue(SoccerEvent soccerEvent)
