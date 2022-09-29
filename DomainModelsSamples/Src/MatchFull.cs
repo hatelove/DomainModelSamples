@@ -7,7 +7,7 @@ public class MatchFull
 
     public void ApplyEvent(SoccerEvent soccerEvent)
     {
-        if (soccerEvent== SoccerEvent.HomeGoal || soccerEvent== SoccerEvent.AwayGoal)
+        if (IsGoal(soccerEvent))
         {
             var goalRecord = GetGoalRecord();
             if (IsFirstHalf())
@@ -22,6 +22,11 @@ public class MatchFull
             }
         }
         
+    }
+
+    private static bool IsGoal(SoccerEvent soccerEvent)
+    {
+        return soccerEvent is SoccerEvent.HomeGoal or SoccerEvent.AwayGoal;
     }
 
     public GoalRecord GetGoalRecord()
