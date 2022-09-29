@@ -1,4 +1,4 @@
-#region
+﻿#region
 
 using FluentAssertions;
 using NSubstitute;
