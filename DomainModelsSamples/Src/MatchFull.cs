@@ -26,6 +26,8 @@ public class MatchFull
         {
             case SoccerEvent.HomeGoal:
                 return "H";
+            case SoccerEvent.AwayGoal:
+                return "A";
             default:
                 throw new ArgumentOutOfRangeException(nameof(soccerEvent), soccerEvent, null);
         }
