@@ -115,7 +115,7 @@ public class GoalRecordTests
     [Category("goal")]
     public void home_goal_when_full_half()
     {
-        var matchFull = GivenMatch(LivePeriodEnum.FirstHalf, "A;");
+        var matchFull = GivenMatch(LivePeriodEnum.FullHalf, "A;");
         matchFull.ApplyEvent(SoccerEvent.HomeGoal);
 
         matchFull.GoalRecord.Should().Be("A;H");

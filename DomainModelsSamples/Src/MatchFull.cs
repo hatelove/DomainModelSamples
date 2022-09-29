@@ -18,8 +18,16 @@ public class MatchFull
     public void ApplyEvent(SoccerEvent soccerEvent)
     {
         var goalRecord = GetGoalRecord();
-        goalRecord.FirstHalf += GetGoalValue(soccerEvent);
-        GoalRecord = goalRecord.FirstHalf;
+        if (IsFirstHalf())
+        {
+            goalRecord.FirstHalf += GetGoalValue(soccerEvent);
+            GoalRecord = goalRecord.FirstHalf;
+        }
+        else
+        {
+            goalRecord.SecondHalf += GetGoalValue(soccerEvent);
+            GoalRecord = $"{goalRecord.FirstHalf};{goalRecord.SecondHalf}";
+        }
     }
 
     private static string GetGoalValue(SoccerEvent soccerEvent)
