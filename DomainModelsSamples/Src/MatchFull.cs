@@ -17,7 +17,9 @@ public class MatchFull
 
     public void ApplyEvent(SoccerEvent soccerEvent)
     {
-        GoalRecord = GetGoalValue(soccerEvent);
+        var goalRecord = GetGoalRecord();
+        goalRecord.FirstHalf += GetGoalValue(soccerEvent);
+        GoalRecord = goalRecord.FirstHalf;
     }
 
     private static string GetGoalValue(SoccerEvent soccerEvent)
