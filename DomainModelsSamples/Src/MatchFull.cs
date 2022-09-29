@@ -14,6 +14,11 @@ public class MatchFull
     {
         return new GoalRecord(GoalRecord);
     }
+
+    public void ApplyEvent(SoccerEvent soccerEvent)
+    {
+        throw new NotImplementedException();
+    }
 }
 
 public class GoalRecord
