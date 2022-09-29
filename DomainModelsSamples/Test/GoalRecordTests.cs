@@ -29,6 +29,16 @@ public class GoalRecordTests
         goalRecord.SecondHalf.Should().Be("");
     }
 
+    [Test]
+    public void scores_when_full_half()
+    {
+        var matchFull = GivenMatch(LivePeriodEnum.FullHalf, "HA;A");
+
+        var goalRecord = matchFull.GetGoalRecord();
+        goalRecord.FirstHalf.Should().Be("HA");
+        goalRecord.SecondHalf.Should().Be("A");
+    }
+
     private static MatchFull GivenMatch(LivePeriodEnum livePeriod, string goalRecord)
     {
         return new MatchFull()
