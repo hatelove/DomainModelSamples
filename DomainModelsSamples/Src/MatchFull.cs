@@ -17,7 +17,7 @@ public class MatchFull
 
     public void ApplyEvent(SoccerEvent soccerEvent)
     {
-        throw new NotImplementedException();
+        GoalRecord = "H";
     }
 }
 
