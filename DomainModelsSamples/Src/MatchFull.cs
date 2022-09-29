@@ -17,12 +17,18 @@ public class MatchFull
 
     public void ApplyEvent(SoccerEvent soccerEvent)
     {
-        GoalRecord = GetGoalValue();
+        GoalRecord = GetGoalValue(soccerEvent);
     }
 
-    private static string GetGoalValue()
+    private static string GetGoalValue(SoccerEvent soccerEvent)
     {
-        return "H";
+        switch (soccerEvent)
+        {
+            case SoccerEvent.HomeGoal:
+                return "H";
+            default:
+                throw new ArgumentOutOfRangeException(nameof(soccerEvent), soccerEvent, null);
+        }
     }
 }
 
