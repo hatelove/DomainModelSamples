@@ -23,13 +23,10 @@ public class GoalRecord
         var scoreSections = goalRecord.Split(";");
         if (scoreSections.Length > 1)
         {
-            FirstHalf = scoreSections[0];
             SecondHalf = scoreSections[1];
         }
-        else
-        {
-            FirstHalf = scoreSections[0];
-        }
+
+        FirstHalf = scoreSections[0];
     }
 
     public string FirstHalf { get; set; } = "";
