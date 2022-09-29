@@ -20,8 +20,3 @@ public class GoalRecordTests
         goalRecord.SecondHalf.Should().Be("");
     }
 }
-
-public enum LivePeriodEnum
-{
-    FirstHalf = 1,
-}

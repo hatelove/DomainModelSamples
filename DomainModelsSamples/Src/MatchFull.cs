@@ -18,11 +18,8 @@ public class MatchFull
 
 public class GoalRecord
 {
-    private readonly string _goalRecord;
-
     public GoalRecord(string goalRecord)
     {
-        _goalRecord = goalRecord;
     }
 
     public string FirstHalf { get; set; } = "";
