@@ -12,12 +12,19 @@ public class MatchFull
 
     public GoalRecord GetGoalRecord()
     {
-        throw new NotImplementedException();
+        return new GoalRecord(GoalRecord);
     }
 }
 
 public class GoalRecord
 {
-    public string FirstHalf { get; set; }
-    public string SecondHalf { get; set; }
+    private readonly string _goalRecord;
+
+    public GoalRecord(string goalRecord)
+    {
+        _goalRecord = goalRecord;
+    }
+
+    public string FirstHalf { get; set; } = "";
+    public string SecondHalf { get; set; } = "";
 }
