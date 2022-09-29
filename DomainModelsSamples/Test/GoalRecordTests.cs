@@ -77,9 +77,23 @@ public class GoalRecordTests
         matchFull.ApplyEvent(SoccerEvent.HomeGoal);
 
         matchFull.GoalRecord.Should().Be("H");
-        
+
         var goalRecord = matchFull.GetGoalRecord();
         goalRecord.FirstHalf.Should().Be("H");
+        goalRecord.SecondHalf.Should().Be("");
+    }
+
+    [Test]
+    [Category("goal")]
+    public void away_goal_when_first_half()
+    {
+        var matchFull = GivenMatch(LivePeriodEnum.FirstHalf, "");
+        matchFull.ApplyEvent(SoccerEvent.AwayGoal);
+
+        matchFull.GoalRecord.Should().Be("A");
+
+        var goalRecord = matchFull.GetGoalRecord();
+        goalRecord.FirstHalf.Should().Be("A");
         goalRecord.SecondHalf.Should().Be("");
     }
 
@@ -95,5 +109,6 @@ public class GoalRecordTests
 
 public enum SoccerEvent
 {
-    HomeGoal
+    HomeGoal,
+    AwayGoal
 }
