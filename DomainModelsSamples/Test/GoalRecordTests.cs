@@ -153,6 +153,20 @@ public class GoalRecordTests
         goalRecord.SecondHalf.Should().Be("HAH");
     }
 
+    [Test]
+    [Category("cancel")]
+    public void cancel_home_goal_when_first_half_and_no_score()
+    {
+        var matchFull = GivenMatch(LivePeriodEnum.FirstHalf, "");
+        matchFull.ApplyEvent(SoccerEvent.CancelHomeGoal);
+
+        matchFull.GoalRecord.Should().Be("");
+
+        var goalRecord = matchFull.GetGoalRecord();
+        goalRecord.FirstHalf.Should().Be("");
+        goalRecord.SecondHalf.Should().Be("");
+    }
+
     private static MatchFull GivenMatch(LivePeriodEnum livePeriod, string goalRecord)
     {
         return new MatchFull()
@@ -166,5 +180,6 @@ public class GoalRecordTests
 public enum SoccerEvent
 {
     HomeGoal,
-    AwayGoal
+    AwayGoal,
+    CancelHomeGoal
 }
