@@ -17,7 +17,12 @@ public class MatchFull
 
     public void ApplyEvent(SoccerEvent soccerEvent)
     {
-        GoalRecord = "H";
+        GoalRecord = GetGoalValue();
+    }
+
+    private static string GetGoalValue()
+    {
+        return "H";
     }
 }
 
