@@ -20,7 +20,17 @@ public class GoalRecord
 {
     public GoalRecord(string goalRecord)
     {
-        FirstHalf = goalRecord;
+        if (!goalRecord.Contains(";"))
+        {
+            FirstHalf = goalRecord;
+        }
+        else
+        {
+            var scoreSections = goalRecord.Split(";");
+            FirstHalf = scoreSections[0];
+            SecondHalf = scoreSections[1];
+        }
+        
     }
 
     public string FirstHalf { get; set; } = "";
