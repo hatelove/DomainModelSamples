@@ -20,6 +20,7 @@ public class GoalRecord
 {
     public GoalRecord(string goalRecord)
     {
+        FirstHalf = goalRecord;
     }
 
     public string FirstHalf { get; set; } = "";
