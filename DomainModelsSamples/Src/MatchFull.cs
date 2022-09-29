@@ -7,17 +7,21 @@ public class MatchFull
 
     public void ApplyEvent(SoccerEvent soccerEvent)
     {
-        var goalRecord = GetGoalRecord();
-        if (IsFirstHalf())
+        if (soccerEvent== SoccerEvent.HomeGoal || soccerEvent== SoccerEvent.AwayGoal)
         {
-            goalRecord.FirstHalf += GetGoalValue(soccerEvent);
-            GoalRecord = goalRecord.FirstHalf;
+            var goalRecord = GetGoalRecord();
+            if (IsFirstHalf())
+            {
+                goalRecord.FirstHalf += GetGoalValue(soccerEvent);
+                GoalRecord = goalRecord.FirstHalf;
+            }
+            else
+            {
+                goalRecord.SecondHalf += GetGoalValue(soccerEvent);
+                GoalRecord = $"{goalRecord.FirstHalf};{goalRecord.SecondHalf}";
+            }
         }
-        else
-        {
-            goalRecord.SecondHalf += GetGoalValue(soccerEvent);
-            GoalRecord = $"{goalRecord.FirstHalf};{goalRecord.SecondHalf}";
-        }
+        
     }
 
     public GoalRecord GetGoalRecord()
