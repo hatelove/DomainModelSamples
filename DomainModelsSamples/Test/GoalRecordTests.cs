@@ -97,6 +97,20 @@ public class GoalRecordTests
         goalRecord.SecondHalf.Should().Be("");
     }
 
+    [Test]
+    [Category("goal")]
+    public void away_goal_when_first_half_with_score()
+    {
+        var matchFull = GivenMatch(LivePeriodEnum.FirstHalf, "H");
+        matchFull.ApplyEvent(SoccerEvent.AwayGoal);
+
+        matchFull.GoalRecord.Should().Be("HA");
+
+        var goalRecord = matchFull.GetGoalRecord();
+        goalRecord.FirstHalf.Should().Be("HA");
+        goalRecord.SecondHalf.Should().Be("");
+    }
+
     private static MatchFull GivenMatch(LivePeriodEnum livePeriod, string goalRecord)
     {
         return new MatchFull()
